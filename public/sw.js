@@ -17,15 +17,16 @@ var STATIC_FILES = [
   'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
 ];
 
-function trimCache(cacheName, maxItems) {
-  caches.open(cacheName).then((cache) => {
-    return cache.keys().then((keys) => {
-      if (keys.length > maxItems) {
-        cache.delete(keys[0]).then(trimCache(cacheName, maxItems));
-      }
-    });
-  });
-}
+// * This is how we trim cache
+// function trimCache(cacheName, maxItems) {
+//   caches.open(cacheName).then((cache) => {
+//     return cache.keys().then((keys) => {
+//       if (keys.length > maxItems) {
+//         cache.delete(keys[0]).then(trimCache(cacheName, maxItems));
+//       }
+//     });
+//   });
+// }
 
 self.addEventListener('install', function (event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
@@ -72,7 +73,7 @@ self.addEventListener('fetch', function (event) {
     event.respondWith(
       caches.open(CACHE_DYNAMIC_NAME).then(function (cache) {
         return fetch(event.request).then(function (res) {
-          trimCache(CACHE_DYNAMIC_NAME, 3);
+          // trimCache(CACHE_DYNAMIC_NAME, 3);
           cache.put(event.request, res.clone());
           return res;
         });
@@ -105,59 +106,3 @@ self.addEventListener('fetch', function (event) {
     );
   }
 });
-
-// self.addEventListener('fetch', function(event) {
-//   event.respondWith(
-//     caches.match(event.request)
-//       .then(function(response) {
-//         if (response) {
-//           return response;
-//         } else {
-//           return fetch(event.request)
-//             .then(function(res) {
-//               return caches.open(CACHE_DYNAMIC_NAME)
-//                 .then(function(cache) {
-//                   cache.put(event.request.url, res.clone());
-//                   return res;
-//                 })
-//             })
-//             .catch(function(err) {
-//               return caches.open(CACHE_STATIC_NAME)
-//                 .then(function(cache) {
-//                   return cache.match('/offline.html');
-//                 });
-//             });
-//         }
-//       })
-//   );
-// });
-
-// self.addEventListener('fetch', function(event) {
-//   event.respondWith(
-//     fetch(event.request)
-//       .then(function(res) {
-//         return caches.open(CACHE_DYNAMIC_NAME)
-//                 .then(function(cache) {
-//                   cache.put(event.request.url, res.clone());
-//                   return res;
-//                 })
-//       })
-//       .catch(function(err) {
-//         return caches.match(event.request);
-//       })
-//   );
-// });
-
-// Cache-only
-// self.addEventListener('fetch', function (event) {
-//   event.respondWith(
-//     caches.match(event.request)
-//   );
-// });
-
-// Network-only
-// self.addEventListener('fetch', function (event) {
-//   event.respondWith(
-//     fetch(event.request)
-//   );
-// });
