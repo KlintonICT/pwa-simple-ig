@@ -112,22 +112,11 @@ fetch(url)
     updateUI(dataArr);
   });
 
-if ('caches' in window) {
-  caches
-    .match(url)
-    .then(function (response) {
-      if (response) {
-        return response.json();
-      }
-    })
-    .then(function (data) {
+if ('indexedDB' in window) {
+  readAllData('posts').then((data) => {
+    if (!networkDataReceived) {
       console.log('From cache', data);
-      if (!networkDataReceived) {
-        let dataArr = [];
-        for (let key in data) {
-          dataArr.push(data[key]);
-        }
-        updateUI(dataArr);
-      }
-    });
+      updateUI(data);
+    }
+  });
 }
