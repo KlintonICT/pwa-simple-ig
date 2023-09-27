@@ -20,3 +20,25 @@ function readAllData(st) {
     return store.getAll();
   });
 }
+
+function clearAllData(st) {
+  return dbPromise.then((db) => {
+    var tx = db.transaction(st, 'readwrite');
+    var store = tx.objectStore(st);
+    store.clear();
+    return tx.complete;
+  });
+}
+
+function deleteItemFromDatabase(st, id) {
+  dbPromise
+    .then((db) => {
+      var tx = db.transaction(st, 'readwrite');
+      var store = db.objectStore(st);
+      store.delete(id);
+      return tx.complete;
+    })
+    .then(() => {
+      console.log('Item deleted!');
+    });
+}
