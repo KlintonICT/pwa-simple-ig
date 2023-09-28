@@ -37,7 +37,7 @@ function deleteItemFromDatabase(st, id) {
   dbPromise
     .then((db) => {
       var tx = db.transaction(st, 'readwrite');
-      var store = db.objectStore(st);
+      var store = tx.objectStore(st);
       store.delete(id);
       return tx.complete;
     })

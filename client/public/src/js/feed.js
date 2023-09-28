@@ -125,23 +125,20 @@ if ('indexedDB' in window) {
 }
 
 const sendData = () => {
-  fetch(
-    'https://pwa-simple-ig-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        id: new Date().toISOString(),
-        title: titleInput.value,
-        location: locationInput.value,
-        image:
-          'https://firebasestorage.googleapis.com/v0/b/pwa-simple-ig.appspot.com/o/sf-boat.jpg?alt=media&token=84e613dd-b1f5-42fc-b995-64777d30b878',
-      }),
-    }
-  ).then((res) => {
+  fetch('http://localhost:4000', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      id: new Date().toISOString(),
+      title: titleInput.value,
+      location: locationInput.value,
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/pwa-simple-ig.appspot.com/o/sf-boat.jpg?alt=media&token=84e613dd-b1f5-42fc-b995-64777d30b878',
+    }),
+  }).then((res) => {
     console.log('Send data', res);
     updateUI();
   });
