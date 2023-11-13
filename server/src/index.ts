@@ -4,7 +4,13 @@ import cors from 'cors';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, push, onValue } from 'firebase/database';
 import webpush from 'web-push';
+import formidable from 'formidable';
 
+// TODO: need to implement to store image
+const gcconfig = {
+  projectId: 'pwa-simple-ig',
+  keyFilename: '',
+};
 const dbConfig = initializeApp({
   databaseURL:
     'https://pwa-simple-ig-default-rtdb.asia-southeast1.firebasedatabase.app',
